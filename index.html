@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lacaker.Paket</title>
+    <link rel="stylesheet" href="css/sb-admin-2.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Tapestry&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fontawesome-free/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inconsolata', monospace;
+            font-family: 'Tapestry', cursive;
+            color: black;
+        }
+
+        .brandText {
+            line-height: 70px;
+        }
+
+        .form{
+            margin-top: 10%;
+        }
+
+        @media screen and (max-width: 1197px) {
+            .form{
+                margin-top: 13%;
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            .form{
+                margin-top: 23%;
+            }
+        }
+        @media screen and (max-width: 500px) {
+            .form{
+                margin-top: 35%;
+            }
+
+            .brandText{
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar shadow fixed-top navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="img/brand.png" width="100" class="d-inline-block align-top" alt="">
+                <h1 class="d-inline pt-5 brandText"><i class="fas fa-l"></i> Lacaker</h1>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card shadow border-bottom-primary form" >
+                    <div class="card-body">
+                        <form action="" method="get">
+                            <div class="form-group">
+                                <label for="resi">No Resi</label>
+                                <input type="text" class="form-control" id="resi" placeholder="Masukan No Resi"
+                                    autofocus>
+                                <small class="form-text text-muted">Harap untuk memasukan No Resi yang benar</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Jasa Kirim/Kurir</label>
+                                <select class="form-control" id="kurir">
+                                    <option>--Jasa Pengiriman--</option>
+                                    <option value="jne">JNE</option>
+                                    <option value="jnt">JNT</option>
+                                    <option value="pos">Pos Indonesia</option>
+                                    <option value="sicepat">SiCepat</option>
+                                    <option value="tiki">Tiki</option>
+                                    <option value="anteraja">AnterAja</option>
+                                    <option value="wahana">Wahana</option>
+                                    <option value="ninja">Ninja</option>
+                                    <option value="lion">lion</option>
+                                    <option value="pcp">PCP Express</option>
+                                    <option value="jet">JET Express</option>
+                                    <option value="rex">REX Express</option>
+                                    <option value="first">First Logistics</option>
+                                    <option value="ide">ID Express</option>
+                                    <option value="kgx">KGXpress</option>
+                                    <option value="rpx">RPX</option>
+                                </select>
+                            </div>
+                            <button type="reset" class="btn btn-primary btnReset">Reset</button>
+                            <button type="submit" class="btn btn-primary btnLacak">Lacak</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 hasil">
+
+        </div>
+    </div>
+
+    <footer class="bg-light text-center fixed-bottom py-3">
+        <a href="#">Abdurahman Jaelani</a>
+        <div class="sosmed">
+            <a class="text-dark" style="font-size: 30px;" href="http://wa.me/+6283874809704"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </footer>
+
+    <script src="js/sweetalert2.js"></script>
+    <script src="js/jquery.js"></script>
+    <script>
+        //   function history(value, index, array){
+        //     $(".history").append(`
+        //         <li class="list-group-item">`+ value[index].desc +`</li>
+        //     `)
+        //   }
+        $(document).ready(function () {
+            $("form").on('submit', function (e) {
+                e.preventDefault()
+
+                let resi = $("#resi").val()
+                let kurir = $("#kurir").val()
+
+                $.ajax({
+                    url: "https://api.binderbyte.com/v1/track",
+                    type: $(this).attr("method"),
+                    data: {
+                        api_key: "a8dbb155f9e7a5d0dfaa34f8353244fa2da610888afdfcfadab3085ffaa79e91",
+                        courier: kurir,
+                        awb: resi
+                    },
+                    beforeSend: function () {
+                        $(".btnLacak").prop('disabled', true)
+                        $(".btnLacak").text("Sedang Melacak..")
+                    },
+                    complete: function () {
+                        $(".btnLacak").text("Lacak")
+                    },
+                    success: function (data) {
+                        // console.log(data)
+                        let dataL = data.data
+                        if (data.status == 200) {
+                            Swal.fire(
+                            'Paket Ditemukan!',
+                            'Paket dengan Resi '+ resi + ' ditemukan',
+                            'success'
+                            )
+                            let array = dataL.history
+                            $(".hasil").append(`
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <div class="card shadow border-left-primary">
+                                            <table class="table text-dark text-center">
+                                                <thead>
+                                                <tr>
+                                                    <th>Pengirim</th>
+                                                    <th>Penerima</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>`+ dataL.detail.shipper + `</td>
+                                                    <td>`+ dataL.detail.receiver + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>`+ dataL.detail.origin + `</td>
+                                                    <td>`+ dataL.detail.destination + `</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="card border-left-primary  shadow mt-3">
+                                            <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">Ringkasan</li>
+                                            <li class="list-group-item">`+ dataL.summary.awb + `</li>
+                                            <li class="list-group-item">`+ dataL.summary.courier + `</li>
+                                            <li class="list-group-item">`+ dataL.summary.status + `</li>
+                                            <li class="list-group-item">`+ dataL.summary.date + `</li>
+                                            <li class="list-group-item">`+ dataL.summary.desc + `</li>
+                                            <li class="list-group-item">`+ dataL.summary.service + `</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <div class="card shadow border-left-primary mt-3">
+                                            <div class="card-header">
+                                            Riwayat Perjalanan
+                                            </div>
+                                            <ul class="list-group list-group-flush history">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            `)
+                            for (i = 0; i < array.length; i++) {
+                                $(".history").append(`
+                                <li class="list-group-item">`
+                                    + "<p style='font-size: 13px;'>" + "<br>" + array[i].date + "</p>" + 
+                                    array[i].desc + "<br>" + 
+                                    "<p  style='font-size: 12px;'>" + array[i].location + "<p>" +
+                                `</li>
+                                `)
+                            }
+
+                        } else{
+                            $(".alert").show()
+                            $(".alert").addClass('alert-danger')
+                            $(".alert").text("Maaf, Sepertinya No Resi Yang Anda Masukan Salah")
+                        }
+
+                    }
+                });
+            })
+        })
+    </script>
+</body>
+
+</html>
