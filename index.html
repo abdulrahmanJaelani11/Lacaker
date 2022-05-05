@@ -5,7 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lacaker.Paket</title>
+    <title>Lacak Paket</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="manifest" href="img/site.webmanifest">
+    
     <link rel="stylesheet" href="css/sb-admin-2.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +31,17 @@
             margin-top: 10%;
         }
 
+        .ppFoot{
+            position: absolute;
+            left: 10px;
+            top: 15px;
+        }
+        
+        .iconFoot{
+            font-size: 30px;
+            margin: 0 8px;
+        }
+
         @media screen and (max-width: 1197px) {
             .form{
                 margin-top: 13%;
@@ -40,6 +56,21 @@
         @media screen and (max-width: 500px) {
             .form{
                 margin-top: 35%;
+            }
+
+            .iconFoot{
+                font-size: 20px;
+            }
+
+            .ppFoot{
+                width: 50px;
+                position: absolute;
+                left: 10px;
+                top: 25px;
+        }
+
+            .namaFoot{
+                font-size: 13px;
             }
 
             .brandText{
@@ -107,9 +138,15 @@
     </div>
 
     <footer class="bg-light text-center fixed-bottom py-3">
-        <a href="#">Abdurahman Jaelani</a>
+        <a href="#" class="namaFoot">Abdurahman Jaelani</a>
         <div class="sosmed">
-            <a class="text-dark" style="font-size: 30px;" href="http://wa.me/+6283874809704"><i class="fab fa-whatsapp"></i></a>
+            <a class="text-dark iconFoot" href="http://wa.me/+6283874809704"><i class="fab fa-whatsapp"></i></a>
+            <a class="text-dark iconFoot" href="https://www.instagram.com/abdurahman_jaelani/"><i class="fab fa-instagram"></i></a>
+            <a class="text-dark iconFoot" href="https://github.com/abdulrahmanJaelani11"><i class="fab fa-github"></i></a>
+            <a class="text-dark iconFoot" href="mailto:randikaangga9044@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+        <div class="img">
+            <img src="img/rahmann.jpg" width="80" class="rounded-circle ppFoot">
         </div>
     </footer>
 
@@ -131,6 +168,7 @@
                 $.ajax({
                     url: "https://api.binderbyte.com/v1/track",
                     type: $(this).attr("method"),
+                    dataType: "json",
                     data: {
                         api_key: "a8dbb155f9e7a5d0dfaa34f8353244fa2da610888afdfcfadab3085ffaa79e91",
                         courier: kurir,
@@ -144,7 +182,7 @@
                         $(".btnLacak").text("Lacak")
                     },
                     success: function (data) {
-                        // console.log(data)
+                        console.log(data)
                         let dataL = data.data
                         if (data.status == 200) {
                             Swal.fire(
@@ -211,11 +249,8 @@
                                 `)
                             }
 
-                        } else{
-                            $(".alert").show()
-                            $(".alert").addClass('alert-danger')
-                            $(".alert").text("Maaf, Sepertinya No Resi Yang Anda Masukan Salah")
                         }
+                            console.log("Tidak Ada")
 
                     }
                 });
